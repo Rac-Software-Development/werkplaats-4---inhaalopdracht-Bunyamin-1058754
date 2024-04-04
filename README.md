@@ -1,4 +1,4 @@
-# Werkplaats 3 - Inhaalopdracht - _configuratiemanager_
+# Werkplaats 4 - Inhaalopdracht - _fietsindicator_
 
 Dit is een configuratie app waarmee je omgevingen/apps kan toevoegen aan een sqllite database. Je moet hierbij inloggen. Als je geen account hebt kan een account maken op de website. Je account word geregistreerd in de database. Nadat je je geregistreerd hebt kan je jezelf inloggen. Inloggen kan niet geschieden zonder account. Nadat je bent ingelogd kom je op de homepagina. Op de homepagina wordt automatisch alle geregistreerde gegevens uit de database weergegeven door middel van een AJAX call. Om de 5 seconden word de pagina automatisch ververst. Op deze manier krijg je direct de nieuwe toegevoegde apps te zien. Links boven heb je een bar met een knop voor het uitloggen en toevoegen van een nieuwe app. Zodra je op de: "Add new app" klikt, kom je op een nieuwe scherm waarbij je de volgende gegevens kan invoeren: Name, Environments, IP, Pincode. Nadat je dit hebt gedaan en op submit klikt, kom je bij een "succes" scherm. Hierna zal je kunnen klikken op een knop die ervoor zorgt dat je weer bij de homepage terecht komt. 
 

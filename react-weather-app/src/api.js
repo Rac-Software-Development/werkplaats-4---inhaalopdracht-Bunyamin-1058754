@@ -1,0 +1,19 @@
+export const geoApiOptions = {
+	method: 'GET',
+	headers: {
+		'X-RapidAPI-Key': 'cc6125055amsh2ecb17c487b91b9p19bdb8jsn3bebdc8cd3e1',
+		'X-RapidAPI-Host': 'wft-geo-db.p.rapidapi.com'
+	}
+};
+
+export const GEO_API_URL = "https://wft-geo-db.p.rapidapi.com/v1/geo";
+
+try {
+	const response = await fetch(url, options);
+	const result = await response.text();
+	console.log(result);
+} catch (error) {
+	console.error(error);
+}
+
+// const url = 'https://wft-geo-db.p.rapidapi.com/v1/geo/cities';

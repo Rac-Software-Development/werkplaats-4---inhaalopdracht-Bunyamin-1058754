@@ -1,4 +1,4 @@
-const url = 'https://wft-geo-db.p.rapidapi.com/v1/geo/cities';
+const url = 'https://wft-geo-db.p.rapidapi.com/v1/geo/cities?maxPopulation=500000';
 
 export const geoApiOptions = {
 	method: 'GET',

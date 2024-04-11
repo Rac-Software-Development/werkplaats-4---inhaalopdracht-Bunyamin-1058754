@@ -1,3 +1,4 @@
+import React from "react";
 import "./current-weather.css"
 
 const CurrentWeather = ({data}) => {

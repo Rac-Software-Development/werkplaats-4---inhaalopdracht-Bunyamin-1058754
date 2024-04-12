@@ -1,5 +1,5 @@
 import "./App.css";
-import Search from "./components/search/search/search";
+import Search from "./components/search/search";
 // import Forecast from './components/search/forecast/forecast';
 import CurrentWeather from "./components/search/current-weather/current-weather";
 import { WEATHER_API_URL, WEATHER_API_KEY } from "./api";

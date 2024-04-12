@@ -10,14 +10,15 @@ function App() {
   const [forecast, setForecast] = useState(null);
 
   const handleOnSearchChange = (searchData) => {
-    const [lat, lon] = searchData.value.split("");
+    const [lat, lon] = searchData.value.split(" ");
 
     const currentWeatherFetch = fetch(
       `${WEATHER_API_URL}/weather?lat=${lat}&lon=${lon}&appid=${WEATHER_API_KEY}&units=metric`
     );
     const forecastFetch = fetch(
-      `${WEATHER_API_URL}/forecast?lat=${lat}&lon=${lon}&appid=${WEATHER_API_KEY}$units=metric`
+      `${WEATHER_API_URL}/forecast?lat=${lat}&lon=${lon}&appid=${WEATHER_API_KEY}&units=metric`
     );
+
 
     Promise.all([currentWeatherFetch, forecastFetch])
       .then(async (response) => {

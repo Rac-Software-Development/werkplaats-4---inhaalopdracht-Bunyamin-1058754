@@ -1,0 +1,24 @@
+/* .app {
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    text-align: left;
+    text-emphasis-color: black;
+}
+
+body {
+
+}
+
+.sidebar{
+    width: 300px;
+    height: 100%;
+    background-color: #27426a;
+    position: absolute; /* Stel de positie in op absoluut zodat het buiten de normale stroom van elementen valt */
+    left: 0; /* Plaats de sidebar aan de linkerkant van de container */
+    top: 0; /* Zet de bovenrand van de sidebar op de bovenrand van de container */
+    background-color: #f0f0f0; /* Voeg een achtergrondkleur toe aan de sidebar */
+    padding: 20px; /* Voeg wat ruimte toe aan de binnenkant van de sidebar */
+      
+} */

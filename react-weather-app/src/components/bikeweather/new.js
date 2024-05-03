@@ -6,7 +6,7 @@ import "./new.css";
 function bikeweather(){
   return(
     <div>
-      <h1>bike weather</h1>
+      <button className="bike-button">bike weather</button>
     </div>
   )
 };
@@ -14,4 +14,3 @@ function bikeweather(){
 
 
 export default bikeweather();
-

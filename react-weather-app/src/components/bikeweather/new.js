@@ -1,16 +1,13 @@
 import React from "react";
-import "../../App.js";
+import { Link } from "react-router-dom";
 import "./new.css";
-// import { useState } from "react";
 
-function bikeweather(){
-  return(
+function Bikeweather() {
+  return (
     <div>
-      <button className="bike-button">bike weather</button>
+      <Link to="/weatherinput" className="bike-button"> Check bike weather!</Link>
     </div>
-  )
-};
+  );
+}
 
-
-
-export default bikeweather();
+export default Bikeweather;

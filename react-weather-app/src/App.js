@@ -4,7 +4,12 @@ import Forecast from './components/search/forecast/forecast';
 import CurrentWeather from "./components/search/current-weather/current-weather";
 import { WEATHER_API_URL, WEATHER_API_KEY } from "./api";
 import { useState } from "react";
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+
+
+
 import bikeweather from "./components/bikeweather/new";
+import weatherinput from "./pages/weatherinput";
 
 
 function App() {
@@ -38,11 +43,19 @@ function App() {
 
   return (
     <div className="container">
-      <Search onSearchChange={handleOnSearchChange} />
-      {currentWeather && <CurrentWeather data={currentWeather} />}
-      {forecast && <Forecast data={forecast} />}
-      {bikeweather}
-      
+      <Router>
+        <Routes>
+          <Route exact path="/" render={() => (
+            <div>
+              <Search onSearchChange={handleOnSearchChange} />
+              {currentWeather && <CurrentWeather data={currentWeather} />}
+              {forecast && <Forecast data={forecast} />}
+              <bikeweather />
+            </div>
+          )} />
+          <Route path="/weatherinput" component={weatherinput} />
+        </Routes>
+      </Router>
     </div>
   );
 }

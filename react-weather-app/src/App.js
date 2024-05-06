@@ -5,7 +5,7 @@ import CurrentWeather from "./components/search/current-weather/current-weather"
 import { WEATHER_API_URL, WEATHER_API_KEY } from "./api";
 import { useState } from "react";
 import { Router, Routes, Route } from 'react-router-dom';
-import weatherinput from "./pages/weatherinput";
+import WeatherInput from "./pages/weatherinput";
 
 
 function App() {
@@ -42,7 +42,8 @@ function App() {
       <Search onSearchChange={handleOnSearchChange} />
       {currentWeather && <CurrentWeather data={currentWeather} />}
       {forecast && <Forecast data={forecast} />}
-      <a href="/weatherinput" >ga naar weatherinput</a>
+      <br></br>
+      <a href="/weatherinput" className = "link-style">Go to weatherinput</a>
     </div>
   );
 }

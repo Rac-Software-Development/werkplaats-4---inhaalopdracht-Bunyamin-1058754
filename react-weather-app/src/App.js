@@ -4,11 +4,7 @@ import Forecast from './components/search/forecast/forecast';
 import CurrentWeather from "./components/search/current-weather/current-weather";
 import { WEATHER_API_URL, WEATHER_API_KEY } from "./api";
 import { useState } from "react";
-import { BrowserRouter, Router, Routes, Route } from 'react-router-dom';
-
-
-
-import bikeweather from "./components/bikeweather/new";
+import { Router, Routes, Route } from 'react-router-dom';
 import weatherinput from "./pages/weatherinput";
 
 
@@ -59,5 +55,6 @@ function App() {
     </div>
   );
 }
+
 
 export default App;

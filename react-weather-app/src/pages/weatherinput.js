@@ -1,3 +1,5 @@
+// {/* <h1>Op de weerinvoerpagina</h1> */}
+
 // import react from 'react';
 // import App from '../App';
 

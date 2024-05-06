@@ -7,13 +7,13 @@ import New from './components/bikeweather/new';
 import WeatherInput from './pages/weatherinput';
 import reportWebVitals from './reportWebVitals';
 
-ReactDOM.render(
+ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <Router>
       <Routes>
-        <Route exact path="/" component={App} />
-        <Route path="/weatherinput" component={WeatherInput} />
-        <Route path="/new" component={New} />
+        <Route exact path="/" element={<App />} /> {/* Hier is de route voor het startscherm */}
+        <Route path="/weatherinput" element={<WeatherInput />} />
+        <Route path="/new" element={<New />} />
       </Routes>
     </Router>
   </React.StrictMode>,

@@ -39,19 +39,10 @@ function App() {
 
   return (
     <div className="container">
-      <Router>
-        <Routes>
-          <Route exact path="/" render={() => (
-            <div>
-              <Search onSearchChange={handleOnSearchChange} />
-              {currentWeather && <CurrentWeather data={currentWeather} />}
-              {forecast && <Forecast data={forecast} />}
-              <bikeweather />
-            </div>
-          )} />
-          <Route path="/weatherinput" component={weatherinput} />
-        </Routes>
-      </Router>
+      <Search onSearchChange={handleOnSearchChange} />
+      {currentWeather && <CurrentWeather data={currentWeather} />}
+      {forecast && <Forecast data={forecast} />}
+      <a href="/weatherinput" >ga naar weatherinput</a>
     </div>
   );
 }

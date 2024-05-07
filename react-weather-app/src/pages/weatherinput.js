@@ -23,37 +23,45 @@ function WeatherInput() {
   };
 
   return (
-    <div>
+    <div className="weather-input-container">
       <h1>Weather Input</h1>
       <form onSubmit={handleSubmit}>
-        <label>
-          City:
-          <input type="text" value={city} onChange={handleCityChange} />
-        </label>
-        <label>
-          Min Temperature:
-          <input type="number" value={minTemp} onChange={handleMinTempChange} />
-        </label>
-        <label>
-          Max Temperature:
-          <input type="number" value={maxTemp} onChange={handleMaxTempChange} />
-        </label>
-        <label>
-          Max Wind Speed:
-          <input type="number" value={maxWind} onChange={handleMaxWindChange} />
-        </label>
-        <label>
-          Rain Chance (%):
-          <input type="number" value={rainChance} onChange={handleRainChanceChange} />
-        </label>
-        <label>
-          Snow Chance (%):
-          <input type="number" value={snowChance} onChange={handleSnowChanceChange} />
-        </label>
+        <div className="input-group">
+          <label>
+            City:
+            <input type="text" value={city} onChange={handleCityChange} />
+          </label>
+        </div>
+        <div className="input-group">
+          <label>
+            Min Temperature:
+            <input type="number" value={minTemp} onChange={handleMinTempChange} />
+          </label>
+          <label>
+            Max Temperature:
+            <input type="number" value={maxTemp} onChange={handleMaxTempChange} />
+          </label>
+        </div>
+        <div className="input-group">
+          <label>
+            Max Wind Speed:
+            <input type="number" value={maxWind} onChange={handleMaxWindChange} />
+          </label>
+        </div>
+        <div className="input-group">
+          <label>
+            Rain Chance (%):
+            <input type="number" value={rainChance} onChange={handleRainChanceChange} />
+          </label>
+          <label>
+            Snow Chance (%):
+            <input type="number" value={snowChance} onChange={handleSnowChanceChange} />
+          </label>
+        </div>
         <button type="submit">Submit</button>
       </form>
-      <br></br>
-      <Link to="/" className = "link-style">Go Back</Link>
+      <br />
+      <Link to="/" className="link-style">Go Back</Link>
     </div>
   );
 }

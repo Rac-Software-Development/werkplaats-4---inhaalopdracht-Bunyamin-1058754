@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 import './weatherinput.css';
 
 function WeatherInput() {
@@ -22,46 +23,56 @@ function WeatherInput() {
     console.log('Entered values:', { city, minTemp, maxTemp, maxWind, rainChance, snowChance });
   };
 
+  useEffect(()=> {
+        axios.post('http://localhost:5000/weather', {
+        city: "city",
+        minTemp: "minTemp",
+        maxTemp: "maxTemp",
+        maxWind: "maxWind",
+        rainChance: "rainChance",
+        snowChance: "snowChance"
+    })
+    .then(response => {
+        console.log(response.data);
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+  }
+  , [])
+
   return (
-    <div className="weather-input-container">
+    <div>
       <h1>Weather Input</h1>
       <form onSubmit={handleSubmit}>
-        <div className="input-group">
-          <label>
-            City:
-            <input type="text" value={city} onChange={handleCityChange} />
-          </label>
-        </div>
-        <div className="input-group">
-          <label>
-            Min Temperature:
-            <input type="number" value={minTemp} onChange={handleMinTempChange} />
-          </label>
-          <label>
-            Max Temperature:
-            <input type="number" value={maxTemp} onChange={handleMaxTempChange} />
-          </label>
-        </div>
-        <div className="input-group">
-          <label>
-            Max Wind Speed:
-            <input type="number" value={maxWind} onChange={handleMaxWindChange} />
-          </label>
-        </div>
-        <div className="input-group">
-          <label>
-            Rain Chance (%):
-            <input type="number" value={rainChance} onChange={handleRainChanceChange} />
-          </label>
-          <label>
-            Snow Chance (%):
-            <input type="number" value={snowChance} onChange={handleSnowChanceChange} />
-          </label>
-        </div>
+        <label>
+          City:
+          <input type="text" value={city} onChange={handleCityChange} />
+        </label>
+        <label>
+          Min Temperature:
+          <input type="number" value={minTemp} onChange={handleMinTempChange} />
+        </label>
+        <label>
+          Max Temperature:
+          <input type="number" value={maxTemp} onChange={handleMaxTempChange} />
+        </label>
+        <label>
+          Max Wind Speed:
+          <input type="number" value={maxWind} onChange={handleMaxWindChange} />
+        </label>
+        <label>
+          Rain Chance (%):
+          <input type="number" value={rainChance} onChange={handleRainChanceChange} />
+        </label>
+        <label>
+          Snow Chance (%):
+          <input type="number" value={snowChance} onChange={handleSnowChanceChange} />
+        </label>
         <button type="submit">Submit</button>
       </form>
-      <br />
-      <Link to="/" className="link-style">Go Back</Link>
+      <br></br>
+      <Link to="/" className = "link-style">Go Back</Link>
     </div>
   );
 }

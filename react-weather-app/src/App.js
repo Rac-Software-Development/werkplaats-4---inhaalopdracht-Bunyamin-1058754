@@ -4,6 +4,7 @@ import Forecast from './components/search/forecast/forecast';
 import CurrentWeather from "./components/search/current-weather/current-weather";
 import { WEATHER_API_URL, WEATHER_API_KEY } from "./api";
 import { useState } from "react";
+import { useEffect } from "react";
 import WeatherInput from "./pages/weatherinput";
 
 
@@ -17,6 +18,7 @@ function App() {
     const currentWeatherFetch = fetch(
       `${WEATHER_API_URL}/weather?lat=${lat}&lon=${lon}&appid=${WEATHER_API_KEY}&units=metric`
     );
+
     const forecastFetch = fetch(
       `${WEATHER_API_URL}/forecast?lat=${lat}&lon=${lon}&appid=${WEATHER_API_KEY}&units=metric`
     );
@@ -35,6 +37,7 @@ function App() {
 
   console.log(currentWeather);
   console.log(forecast);
+ 
 
   return (
     <div className="container">

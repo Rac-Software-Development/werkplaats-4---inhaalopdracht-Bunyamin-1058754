@@ -24,13 +24,14 @@ function WeatherInput() {
   };
 
   useEffect(()=> {
+    if (city && minTemp && maxTemp && maxWind && rainChance && snowChance ){
         axios.post('http://localhost:5000/weather', {
-        city: "city",
-        minTemp: "minTemp",
-        maxTemp: "maxTemp",
-        maxWind: "maxWind",
-        rainChance: "rainChance",
-        snowChance: "snowChance"
+        city: city,
+        minTemp: minTemp,
+        maxTemp: maxTemp,
+        maxWind: maxWind,
+        rainChance: rainChance,
+        snowChance: snowChance
     })
     .then(response => {
         console.log(response.data);
@@ -39,7 +40,7 @@ function WeatherInput() {
         console.error('Error:', error);
     });
   }
-  , [])
+  }  , [city, minTemp, maxTemp, maxWind, rainChance, snowChance])
 
   return (
     <div>

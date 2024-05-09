@@ -47,6 +47,6 @@ def add_weather_data():
 @cross_origin()
 def submit():
    
-
+    
  if __name__ == '__main__':
     app.run(port=5000)

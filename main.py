@@ -1,10 +1,10 @@
 from flask import Flask, request, jsonify
-import sqlite3
-# import requests 
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from flask_cors import CORS, cross_origin
 from datetime import datetime, timedelta
+import requests
+import config
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///C:/Users/bunya/Desktop/STUDIE/JAAR 1/PERIODE 4/werkplaats-4---inhaalopdracht-Bunyamin-1058754/bike.db"
@@ -92,11 +92,18 @@ def add_weather_data():
     
     
 
-    
-# @app.route('/weather', methods=['POST'])
-# @cross_origin()
-# def submit():
-   
+@app.route('/predict', methods=['GET'])
+@cross_origin("http://localhost:3000")
+def get_weather_prediction():
+    settings = get_settings()
+    if settings:
+        city = settings[0].city  # Assuming all settings are for the same city
+        api_key = config.OPENWEATHER_API_KEY
+        weather_data = get_weather(city, api_key)
+        result = check_weather_conditions(weather_data, settings)
+        return jsonify(result)
+    else:
+        return jsonify({"error": "No settings found"}), 404
     
 if __name__ == '__main__':
     app.run(port=5000)

@@ -5,6 +5,7 @@ from flask_cors import CORS, cross_origin
 from datetime import datetime, timedelta
 import requests
 import config
+import os 
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///C:/Users/bunya/Desktop/STUDIE/JAAR 1/PERIODE 4/werkplaats-4---inhaalopdracht-Bunyamin-1058754/bike.db"
@@ -27,6 +28,7 @@ with app.app_context():
 
 
 def get_settings():
+    settings = WeatherData.query.all()
     conn = SQLAlchemy.connect('bike.db')   
     cursor = conn.cursor()
     cursor.execute('SELECT * FROM settings')
@@ -35,9 +37,7 @@ def get_settings():
     return settings
     
 
-def get_weather():
-    api_key = 'YOUR_API_KEY'
-    city = 'YOUR_CITY'
+def get_weather(city, api_key):
     url = f'http://api.openweathermap.org/data/2.5/forecast?q={city}&appid={api_key}'
     response = requests.get(url)
     weather_data = response.json()
@@ -45,7 +45,6 @@ def get_weather():
 
 def check_weather_conditions(weather_data, settings):
     result = {}
-    can_bike = True
     
     today = datetime.now()
     for i in range(1, 4):
@@ -53,18 +52,29 @@ def check_weather_conditions(weather_data, settings):
         can_bike = True
         
         for setting in settings:
-            setting_name, min_value, max_value = setting
+            min_temp = setting.mintemp
+            max_temp = setting.maxtemp
+            max_wind = setting.maxwind
+            rain_chance = setting.rainchance
+            snow_chance = setting.snowchance
             
             for forecast in weather_data['list']:
                 forecast_date = datetime.fromtimestamp(forecast['dt']).strftime('%Y-%m-%d')
                 if forecast_date == day:
-                    if setting_name == 'temperature':
-                        temp_k = forecast['main']['temp']
-                        temp_c = temp_k - 273.15  # Convert from Kelvin to Celsius
-                        if not (min_value <= temp_c <= max_value):
-                            can_bike = False
-                    # Voeg meer weercondities toe zoals nodig
-                    # ...
+                    temp_k = forecast['main']['temp']
+                    temp_c = temp_k - 273.15  # Convert from Kelvin to Celsius
+                    wind_speed = forecast['wind']['speed']
+                    rain = forecast.get('rain', {}).get('3h', 0)
+                    snow = forecast.get('snow', {}).get('3h', 0)
+                    
+                    if not (min_temp <= temp_c <= max_temp):
+                        can_bike = False
+                    if wind_speed > max_wind:
+                        can_bike = False
+                    if rain > rain_chance:
+                        can_bike = False
+                    if snow > snow_chance:
+                        can_bike = False
 
         result[day] = can_bike
     
@@ -97,7 +107,7 @@ def add_weather_data():
 def get_weather_prediction():
     settings = get_settings()
     if settings:
-        city = settings[0].city  # Assuming all settings are for the same city
+        city = settings[0].city 
         api_key = config.OPENWEATHER_API_KEY
         weather_data = get_weather(city, api_key)
         result = check_weather_conditions(weather_data, settings)

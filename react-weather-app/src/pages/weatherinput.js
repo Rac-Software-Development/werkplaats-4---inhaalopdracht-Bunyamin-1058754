@@ -25,7 +25,7 @@ function WeatherInput() {
 
   useEffect(()=> {
     if (city && minTemp && maxTemp && maxWind && rainChance && snowChance ){
-        axios.post('http://localhost:5000/weather', {
+        axios.post('http://127.0.0.1:5000/weather', {
         city: city,
         minTemp: minTemp,
         maxTemp: maxTemp,

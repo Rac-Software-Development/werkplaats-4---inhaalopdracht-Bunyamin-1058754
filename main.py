@@ -1,8 +1,10 @@
 from flask import Flask, request, jsonify
 import sqlite3
+# import requests 
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from flask_cors import CORS, cross_origin
+from datetime import datetime, timedelta
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///C:/Users/bunya/Desktop/STUDIE/JAAR 1/PERIODE 4/werkplaats-4---inhaalopdracht-Bunyamin-1058754/bike.db"
@@ -24,8 +26,54 @@ with app.app_context():
     db.create_all()
 
 
+def get_settings():
+    conn = SQLAlchemy.connect('bike.db')   
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM settings')
+    settings = cursor.fetchall()
+    conn.close()
+    return settings
+    
+
+def get_weather():
+    api_key = 'YOUR_API_KEY'
+    city = 'YOUR_CITY'
+    url = f'http://api.openweathermap.org/data/2.5/forecast?q={city}&appid={api_key}'
+    response = requests.get(url)
+    weather_data = response.json()
+    return weather_data
+
+def check_weather_conditions(weather_data, settings):
+    result = {}
+    can_bike = True
+    
+    today = datetime.now()
+    for i in range(1, 4):
+        day = (today + timedelta(days=i)).strftime('%Y-%m-%d')
+        can_bike = True
+        
+        for setting in settings:
+            setting_name, min_value, max_value = setting
+            
+            for forecast in weather_data['list']:
+                forecast_date = datetime.fromtimestamp(forecast['dt']).strftime('%Y-%m-%d')
+                if forecast_date == day:
+                    if setting_name == 'temperature':
+                        temp_k = forecast['main']['temp']
+                        temp_c = temp_k - 273.15  # Convert from Kelvin to Celsius
+                        if not (min_value <= temp_c <= max_value):
+                            can_bike = False
+                    # Voeg meer weercondities toe zoals nodig
+                    # ...
+
+        result[day] = can_bike
+    
+    return result
+
+
+
 @app.route('/weather', methods=['POST'])
-@cross_origin()
+@cross_origin("http://localhost:3000")
 def add_weather_data():
     data = request.get_json()
     print("data", data)
@@ -40,13 +88,15 @@ def add_weather_data():
     
     db.session.add(new_weather_data)
     db.session.commit()
-    return jsonify({'message': 'new weather data added'})    
+    return jsonify(data)    
     
     
-@app.route('/weather', methods=['POST'])
-@cross_origin()
-def submit():
+
+    
+# @app.route('/weather', methods=['POST'])
+# @cross_origin()
+# def submit():
    
     
- if __name__ == '__main__':
+if __name__ == '__main__':
     app.run(port=5000)

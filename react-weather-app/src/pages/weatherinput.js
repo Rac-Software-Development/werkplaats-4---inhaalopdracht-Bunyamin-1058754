@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './weatherinput.css';
 import Get from './getfunction';
@@ -11,6 +11,7 @@ function WeatherInput() {
   const [maxWind, setMaxWind] = useState('');
   const [rainChance, setRainChance] = useState('');
   const [snowChance, setSnowChance] = useState('');
+  const navigate = useNavigate();
 
   const handleCityChange = (e) => setCity(e.target.value);
   const handleMinTempChange = (e) => setMinTemp(e.target.value);
@@ -21,28 +22,23 @@ function WeatherInput() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Entered values:', { city, minTemp, maxTemp, maxWind, rainChance, snowChance });
-  };
-
-  useEffect(()=> {
-    if (city && minTemp && maxTemp && maxWind && rainChance && snowChance ){
-        axios.post('http://127.0.0.1:5000/weather', {
-        city: city,
-        minTemp: minTemp,
-        maxTemp: maxTemp,
-        maxWind: maxWind,
-        rainChance: rainChance,
-        snowChance: snowChance
+    axios.post('http://127.0.0.1:5000/weather', {
+      city: city,
+      minTemp: minTemp,
+      maxTemp: maxTemp,
+      maxWind: maxWind,
+      rainChance: rainChance,
+      snowChance: snowChance
     })
     .then(response => {
-        console.log(response.data);
+      console.log(response.data);
+      navigate(`/predict/${city}`);
     })
     .catch(error => {
-        console.error('Error:', error);
+      console.error('Error:', error);
     });
-  }
-  }  , [city, minTemp, maxTemp, maxWind, rainChance, snowChance])
-
+  };
+    // console.log('Entered values:', { city, minTemp, maxTemp, maxWind, rainChance, snowChance });
   return (
     <div>
       <h1>Weather Input</h1>
@@ -71,14 +67,14 @@ function WeatherInput() {
           Snow Chance (%):
           <input type="number" value={snowChance} onChange={handleSnowChanceChange} />
         </label>
-        <button type="submit">Submit</button>
+  
+        <button type="submit" className = "link-style">Predict Bike Weather</button>
         <Get city={city} />
       </form>
       <br></br>
+
+      {/* <a href ='/predict'className = "link-style">Predict Bike Weather</a> */}
       <Link to="/" className = "link-style">Go Back</Link>
-      
-      
-      <a href='/predict'>predict</a>
     </div>
   );
 }

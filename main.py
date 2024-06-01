@@ -22,15 +22,12 @@ class WeatherData(db.Model):
     rainchance: Mapped[int] = mapped_column(db.Integer, nullable=False)
     snowchance: Mapped[int] = mapped_column(db.Integer, nullable=False)
 
-   
 with app.app_context():
     db.create_all()
-
 
 def get_settings():
     return WeatherData.query.order_by(WeatherData.id.desc()).first()
     
-
 def get_weather(city, api_key):
     url = f'http://api.openweathermap.org/data/2.5/forecast?q={city}&appid={api_key}&units=metric'
     response = requests.get(url)
@@ -44,53 +41,39 @@ def check_weather_conditions(weather_data, settings):
     result = {}
     today = datetime.now().date()
     
+    min_temp = settings.mintemp
+    max_temp = settings.maxtemp
+    max_wind = settings.maxwind
+    rain_chance = settings.rainchance
+    snow_chance = settings.snowchance
+    location = settings.city
+    
     for i in range(3):
         day = (today + timedelta(days=i)).strftime('%Y-%m-%d')
         can_bike = True
-        settings=[]
-        for setting in settings:
-            locatie = setting.city
-            min_temp = setting.mintemp
-            max_temp = setting.maxtemp
-            max_wind = setting.maxwind
-            rain_chance = setting.rainchance
-            snow_chance = setting.snowchance
-            
-            
-            day_weather = [forecast for forecast in weather_data['list'] if datetime.fromtimestamp(forecast['dt']).strftime('%Y-%m-%d') == day]
-            if not day_weather:
-                continue
-            
-        
-            for forecast in day_weather:
-                temp = forecast['main']['temp']
-                wind_speed = forecast['wind']['speed']
-                rain = forecast.get('rain', {}).get('3h', 0)
-                snow = forecast.get('snow', {}).get('3h', 0)
+
+        day_weather = [forecast for forecast in weather_data['list'] if datetime.fromtimestamp(forecast['dt']).strftime('%Y-%m-%d') == day]
+        if not day_weather:
+            continue
+
+        for forecast in day_weather:
+            temp = forecast['main']['temp']
+            wind_speed = forecast['wind']['speed']
+            rain = forecast.get('rain', {}).get('3h', 0)
+            snow = forecast.get('snow', {}).get('3h', 0)
                 
-                if int(min_temp) <= int(temp) :
+            if int(min_temp) <= int(temp) :
                     can_bike = False
-                if wind_speed > max_wind:
+            if wind_speed > max_wind:
                     can_bike = False
-                if rain > rain_chance:
+            if rain > rain_chance:
                     can_bike = False
-                if snow > snow_chance:
-                    can_bike = False
-                    
-                if rain_chance > 50:
-                    can_bike = True
-                if snow_chance > 50:
-                    can_bike = False
-                if wind_speed > 5:
-                    can_bike = False
-                if max_temp > 22:
-                    can_bike = False
-                if min_temp < 5:
+            if snow > snow_chance:
                     can_bike = False
         
         result[day] = can_bike
 
-    return {"data":result, "locatie":WeatherData.query.order_by(WeatherData.id.desc()).first().city}
+    return {"data":result, "location":WeatherData.query.order_by(WeatherData.id.desc()).first().city}
 
     #         for forecast in weather_data['list']:
     #             forecast_date = datetime.fromtimestamp(forecast['dt']).strftime('%Y-%m-%d')

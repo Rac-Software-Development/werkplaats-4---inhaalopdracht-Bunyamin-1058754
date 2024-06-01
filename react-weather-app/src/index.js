@@ -14,7 +14,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       <Routes>
         <Route exact path="/" element={<App />} /> {/* Hier is de route voor het startscherm */}
         <Route path="/weatherinput" element={<WeatherInput />} />
-        <Route path="/predict" element={<Get />} />
+        <Route path="/predict/:city" element={<Get />} />
         <Route path="/new" element={<New />} />
       </Routes>
     </Router>

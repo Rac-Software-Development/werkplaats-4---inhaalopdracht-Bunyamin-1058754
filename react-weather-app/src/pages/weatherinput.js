@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import './weatherinput.css';
+import Get from './getfunction';
 
 function WeatherInput() {
   const [city, setCity] = useState('');
@@ -71,9 +72,13 @@ function WeatherInput() {
           <input type="number" value={snowChance} onChange={handleSnowChanceChange} />
         </label>
         <button type="submit">Submit</button>
+        <Get city={city} />
       </form>
       <br></br>
       <Link to="/" className = "link-style">Go Back</Link>
+      
+      
+      <a href='/predict'>predict</a>
     </div>
   );
 }

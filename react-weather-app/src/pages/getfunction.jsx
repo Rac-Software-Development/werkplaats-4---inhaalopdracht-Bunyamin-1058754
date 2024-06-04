@@ -12,13 +12,17 @@ const Get = () => {
     if (city) {
       axios.get(`http://127.0.0.1:5000/predict/${city}`)
         .then((res) => {
+          console.log('Response data:', res.data)
           setData(res.data);
           setLoading(false);
         })
         .catch((err) => {
+          console.log('Error:', err);	
           setError(err);
           setLoading(false);
         });
+    } else {
+      setLoading(false);
     }
   }, [city]);
 

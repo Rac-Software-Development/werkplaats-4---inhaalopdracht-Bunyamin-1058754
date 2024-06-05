@@ -52,9 +52,19 @@ pip install -r requirements.txt
 Run the Flask server:
 
 4. **Run the Flask Server:**
-python main.py
+python main.py -- run button
 
-## Usage
+## Usage of application
+-- backend startup:
+1. start the backend with flask, run the following command: run -- flask start
+2. your port should start on your local server at port 5000
+3. Google chrome should be opened by default 
+-- frontend startup:
+4. to start the frontend with React.JS., run the following command to go one up higher in the files: cd react-weather-app
+5. npm -- run start react-weather-app
+6. your port should start on your local server at port 3000
+7. you should arrive automatically on the weather app.
+8. ready to use!
 
 ### Backend (Flask)
 The backend is built using Flask and SQLAlchemy. It interacts with the SQLite database to store user configurations and fetches weather data from the OpenWeather API.

@@ -39,44 +39,44 @@ function WeatherInput() {
     });
   };
     // console.log('Entered values:', { city, minTemp, maxTemp, maxWind, rainChance, snowChance });
-  return (
-    <div>
-      <h1>Weather Input</h1>
-      <form onSubmit={handleSubmit}>
-        <label>
-          City:
-          <input type="text" value={city} onChange={handleCityChange} />
-        </label>
-        <label>
-          Min Temperature:
-          <input type="number" value={minTemp} onChange={handleMinTempChange} />
-        </label>
-        <label>
-          Max Temperature:
-          <input type="number" value={maxTemp} onChange={handleMaxTempChange} />
-        </label>
-        <label>
-          Max Wind Speed:
-          <input type="number" value={maxWind} onChange={handleMaxWindChange} />
-        </label>
-        <label>
-          Rain Chance (%):
-          <input type="number" value={rainChance} onChange={handleRainChanceChange} />
-        </label>
-        <label>
-          Snow Chance (%):
-          <input type="number" value={snowChance} onChange={handleSnowChanceChange} />
-        </label>
+    return (
+      <div className="weather-input-container">
+        <h1>Weather Input</h1>
+        <div className="form-box">
+          <form onSubmit={handleSubmit}>
+            <div className="input-group">
+              <label>City:</label>
+              <input type="text" value={city} onChange={handleCityChange} />
+            </div>
+            <div className="input-group">
+              <label>Min Temperature °C:</label>
+              <input type="number" value={minTemp} onChange={handleMinTempChange} />
+            </div>
+            <div className="input-group">
+              <label>Max Temperature °C:</label>
+              <input type="number" value={maxTemp} onChange={handleMaxTempChange} />
+            </div>
+            <div className="input-group">
+              <label>Max Wind Speed m/s:</label>
+              <input type="number" value={maxWind} onChange={handleMaxWindChange} />
+            </div>
+            <div className="input-group">
+              <label>Rain Chance (%):</label>
+              <input type="number" value={rainChance} onChange={handleRainChanceChange} />
+            </div>
+            <div className="input-group">
+              <label>Snow Chance (%):</label>
+              <input type="number" value={snowChance} onChange={handleSnowChanceChange} />
+            </div>
+            <div className="button-group">
+              <button type="submit">Predict Bike Weather</button>
+            </div>
+          </form>
+          <Get city={city} />
+          <Link to="/" className="link-style">Go Back</Link>
+        </div>
+      </div>
+    );
+  }
   
-        <button type="submit" className = "link-style">Predict Bike Weather</button>
-        <Get city={city} />
-      </form>
-      <br></br>
-
-      {/* <a href ='/predict'className = "link-style">Predict Bike Weather</a> */}
-      <Link to="/" className = "link-style">Go Back</Link>
-    </div>
-  );
-}
-
-export default WeatherInput;
+  export default WeatherInput;

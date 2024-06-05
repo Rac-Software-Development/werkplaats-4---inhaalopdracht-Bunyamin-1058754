@@ -37,16 +37,16 @@ def get_weather(city, api_key):
         print(f"Error fetching weather data: {response.status_code}")
     return None
 
-def check_weather_conditions(weather_data, settings):
+def check_weather_conditions(weather_data, get_settings):
     result = {}
     today = datetime.now().date()
     
-    min_temp = settings.mintemp
-    max_temp = settings.maxtemp
-    max_wind = settings.maxwind
-    rain_chance = settings.rainchance
-    snow_chance = settings.snowchance
-    location = settings.city
+    min_temp = get_settings.mintemp
+    max_temp = get_settings.maxtemp
+    max_wind = get_settings.maxwind
+    rain_chance = get_settings.rainchance
+    snow_chance = get_settings.snowchance
+    location = get_settings.city
     
     for i in range(3):
         day = (today + timedelta(days=i)).strftime('%Y-%m-%d')
@@ -57,13 +57,15 @@ def check_weather_conditions(weather_data, settings):
             continue
 
         for forecast in day_weather:
-            temp = forecast['main']['temp']
-            wind_speed = forecast['wind']['speed']
+            temp = day_weather[0]['main']['temp']
+            mintemp = day_weather[0]['main']['temp_min']
+            wind_speed = day_weather[0]['wind']['speed']
             rain = forecast.get('rain', {}).get('3h', 0)
             snow = forecast.get('snow', {}).get('3h', 0)
+            
                 
-            if int(min_temp) <= int(temp) :
-                    can_bike = False
+            if int(min_temp) <= int(mintemp) :
+                    can_bike = True
             if wind_speed > max_wind:
                     can_bike = False
             if rain > rain_chance:
@@ -73,7 +75,7 @@ def check_weather_conditions(weather_data, settings):
         
         result[day] = can_bike
 
-    return {"data":result, "location":WeatherData.query.order_by(WeatherData.id.desc()).first().city}
+    return {"data":result, "location":WeatherData.query.order_by(WeatherData.id.desc()).first().city,"mintemp":mintemp}
 
     #         for forecast in weather_data['list']:
     #             forecast_date = datetime.fromtimestamp(forecast['dt']).strftime('%Y-%m-%d')

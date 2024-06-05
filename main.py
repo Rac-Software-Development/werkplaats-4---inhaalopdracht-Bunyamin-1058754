@@ -59,13 +59,14 @@ def check_weather_conditions(weather_data, get_settings):
         for forecast in day_weather:
             temp = day_weather[0]['main']['temp']
             mintemp = day_weather[0]['main']['temp_min']
+            maxtemp = forecast['main']['temp_max']
             wind_speed = day_weather[0]['wind']['speed']
             rain = forecast.get('rain', {}).get('3h', 0)
             snow = forecast.get('snow', {}).get('3h', 0)
             
                 
-            if int(min_temp) <= int(mintemp) :
-                    can_bike = True
+            if int(min_temp) <= int(mintemp) or int(maxtemp) > int(max_temp):
+                    can_bike = False
             if wind_speed > max_wind:
                     can_bike = False
             if rain > rain_chance:
@@ -75,7 +76,8 @@ def check_weather_conditions(weather_data, get_settings):
         
         result[day] = can_bike
 
-    return {"data":result, "location":WeatherData.query.order_by(WeatherData.id.desc()).first().city,"mintemp":mintemp}
+    return {"data": result, "location": location, "mintemp": min_temp, "maxtemp": max_temp}
+    # return {"data":result, "location":WeatherData.query.order_by(WeatherData.id.desc()).first().city,"mintemp":mintemp}
 
     #         for forecast in weather_data['list']:
     #             forecast_date = datetime.fromtimestamp(forecast['dt']).strftime('%Y-%m-%d')

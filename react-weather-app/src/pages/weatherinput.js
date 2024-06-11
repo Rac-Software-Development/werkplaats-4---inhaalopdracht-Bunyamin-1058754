@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import Cookies from 'js-cookie';
 import './weatherinput.css';
 import Get from './getfunction';
 
@@ -11,7 +12,28 @@ function WeatherInput() {
   const [maxWind, setMaxWind] = useState('');
   const [rainChance, setRainChance] = useState('');
   const [snowChance, setSnowChance] = useState('');
+  const [prediction, setPrediction] = useState(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const settingsId = Cookies.get('settingsId');
+    if (settingsId) {
+      axios.get(`http://127.0.0.1:5000/get_settings/${settingsId}`)
+        .then(response => {
+          const data = response.data;
+          setCity(data.city);
+          setMinTemp(data.minTemp);
+          setMaxTemp(data.maxTemp);
+          setMaxWind(data.maxWind);
+          setRainChance(data.rainChance);
+          setSnowChance(data.snowChance);
+          getPrediction(data);
+        })
+        .catch(error => {
+          console.error('Error fetching settings:', error);
+        });
+    }
+  }, []);
 
   const handleCityChange = (e) => setCity(e.target.value);
   const handleMinTempChange = (e) => setMinTemp(e.target.value);
@@ -31,6 +53,9 @@ function WeatherInput() {
       snowChance: snowChance
     })
     .then(response => {
+      const settingsId = response.data.Id;
+      Cookies.saveSettings(settingsId);
+      getPrediction({ city, minTemp, maxTemp, maxWind, rainChance, snowChance });
       console.log(response.data);
       navigate(`/predict/${city}`);
     })
@@ -38,6 +63,15 @@ function WeatherInput() {
       console.error('Error:', error);
     });
   };
+
+  const getPrediction = (setting) => {
+    axios.post('http://127.0.0.1:5000/predict',)
+    .then(response => {
+      setPrediction(response.data);
+    })
+    .catch(error => {
+      console.error('Error fetching prediction:', error);
+    });
     // console.log('Entered values:', { city, minTemp, maxTemp, maxWind, rainChance, snowChance });
     return (
       <div className="weather-input-container">
@@ -69,14 +103,27 @@ function WeatherInput() {
               <input type="number" value={snowChance} onChange={handleSnowChanceChange} />
             </div>
             <div className="button-group">
-              <button type="submit">Predict Bike Weather</button>
+              <button type="submit">Save to database</button>
             </div>
           </form>
-          <Get city={city} />
+          {prediction && (
+            <div>
+              <h2>Prediction</h2>
+              <p>City: {prediction.location}</p>
+              <p>Min Temp: {prediction.mintemp}</p>
+              <p>Max Temp: {prediction.maxtemp}</p>
+              <p>Prediction for next three days:</p>
+              <ul>
+                {Object.entries(prediction.data).map(([date, canBike]) => (
+                  <li key={date}>{date}: {canBike ? 'YES' : 'NO'}</li>
+                ))}
+              </ul>
+            </div>
+          )}
           <Link to="/" className="link-style">Go Back</Link>
         </div>
       </div>
     );
   }
-  
+}
   export default WeatherInput;

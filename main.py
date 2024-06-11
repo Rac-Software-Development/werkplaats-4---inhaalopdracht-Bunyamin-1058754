@@ -100,7 +100,35 @@ def check_weather_conditions(weather_data, get_settings):
     #     result[day] = can_bike
     
     # return result
+@app.route('/save_settings', methods=['POST'])
+def save_settings():
+    data = request.get_json()
+    new_settings = WeatherData(
+        city=data['city'], 
+        mintemp=data['minTemp'], 
+        maxtemp=data['maxTemp'], 
+        maxwind=data['maxWind'], 
+        rainchance=data['rainChance'], 
+        snowchance=data['snowChance']
+        )
+    
+    db.session.add(new_settings)
+    db.session.commit()
+    return jsonify({"id": new_settings.id})
 
+@app.route('/get_settings/<int:id>', methods=['GET'])
+def get_settings(id):    
+    settings = Weatherdata.query.get(id)
+    if settings:
+        return jsonify({
+            "city": settings.city,
+            "minTemp": settings.minTemp,
+            "maxTemp": settings.maxTemp,
+            "maxWind": settings.maxWind,
+            "rainChance": settings.rainChance,
+            "snowChance": settings.snowChance
+        })
+    return jsonify({"error": "No settings found"}), 404
 
 
 @app.route('/weather', methods=['POST'])
@@ -137,6 +165,7 @@ def get_weather_prediction(city):
         return jsonify({"error": "No settings found"}), 404
 
 if __name__ == '__main__':
+    db.create_all()
     app.run(port=5000, debug=True)   
  
 #dit moet ik gaan loopen dus, voor alle tijden dus 3 uur, 6. 9 uur. 

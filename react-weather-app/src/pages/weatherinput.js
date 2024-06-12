@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import './weatherinput.css';
+import Get from './getfunction';
 
 function WeatherInput() {
   const [city, setCity] = useState('');
@@ -16,10 +17,12 @@ function WeatherInput() {
 
   useEffect(() => {
     const settingsId = Cookies.get('settingsId');
+    console.log("Settings IDs:", settingsId)
     if (settingsId) {
       axios.get(`http://127.0.0.1:5000/get_settings/${settingsId}`)
         .then(response => {
           const data = response.data;
+          console.log("Settings data:", data)
           setCity(data.city);
           setMinTemp(data.minTemp);
           setMaxTemp(data.maxTemp);

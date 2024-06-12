@@ -153,11 +153,14 @@ def add_weather_data():
 @cross_origin("http://localhost:3000")
 def get_weather_prediction(city):
     settings = get_settings()
+    print("Settings:", settings)
     if settings:
         api_key = config.OPENWEATHER_API_KEY
         weather_data = get_weather(city, api_key)
+        print("Weather data:", weather_data)
         if weather_data:
             result = check_weather_conditions(weather_data, settings)
+            print("Weather conditions:", result)
             return jsonify(result)
         else:
             return jsonify({"error": "Failed to fetch weather data"}), 500

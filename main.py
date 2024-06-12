@@ -118,7 +118,7 @@ def save_settings():
 
 @app.route('/get_settings/<int:id>', methods=['GET'])
 def get_settings(id):    
-    settings = Weatherdata.query.get(id)
+    settings = WeatherData.query.get(id)
     if settings:
         return jsonify({
             "city": settings.city,

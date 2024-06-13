@@ -25,7 +25,7 @@ class WeatherData(db.Model):
 with app.app_context():
     db.create_all()
 
-def get_settings():
+def get_latest_settings():
     return WeatherData.query.order_by(WeatherData.id.desc()).first()
     
 def get_weather(city, api_key):
@@ -152,7 +152,8 @@ def add_weather_data():
 @app.route('/predict/<city>', methods=['GET'])
 @cross_origin("http://localhost:3000")
 def get_weather_prediction(city):
-    settings = get_settings()
+    print(f"fetching weather prediction for {city}")
+    settings = get_latest_settings()
     print("Settings:", settings)
     if settings:
         api_key = config.OPENWEATHER_API_KEY
@@ -160,10 +161,10 @@ def get_weather_prediction(city):
         print("Weather data:", weather_data)
         if weather_data:
             result = check_weather_conditions(weather_data, settings)
-            print("Weather conditions:", result)
+            print("Prediction result:", result)
             return jsonify(result)
         else:
-            return jsonify({"error": "Failed to fetch weather data"}), 500
+            return jsonify({"error": "failed to fetch weather data"}), 500
     else:
         return jsonify({"error": "No settings found"}), 404
 

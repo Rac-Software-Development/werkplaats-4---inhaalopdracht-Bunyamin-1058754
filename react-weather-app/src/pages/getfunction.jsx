@@ -10,6 +10,7 @@ const Get = () => {
 
   useEffect(() => {
     if (city) {
+      console.log(`Fetching data from ${city}`)
       axios.get(`http://127.0.0.1:5000/predict/${city}`)
         .then((res) => {
           console.log('Response data:', res.data)

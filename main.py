@@ -131,18 +131,27 @@ def add_weather_data():
 @app.route('/predict/<city>', methods=['GET'])
 @cross_origin("http://localhost:3000")
 def get_weather_prediction(city):
-    print(f"Fetching weather prediction for {city}")  # Log de stad waarvoor voorspellingen worden opgehaald
-    settings = get_settings()  # Haal de meest recente settings op
-    if settings:
-        api_key = config.OPENWEATHER_API_KEY
-        weather_data = get_weather(city, api_key)
-        if weather_data:
-            result = check_weather_conditions(weather_data, settings)
-            return jsonify(result)
+    try:
+        print(f"Fetching weather prediction for {city}")  # Log de stad waarvoor voorspellingen worden opgehaald
+        settings = get_settings()  # Haal de meest recente settings op
+        if settings:
+            api_key = config.OPENWEATHER_API_KEY
+            print(f"Using API key: {api_key}")  # Log de gebruikte API key
+            weather_data = get_weather(city, api_key)
+            if weather_data:
+                print(f"Weather data fetched for {city}: {weather_data}")  # Log de opgehaalde weerdata
+                result = check_weather_conditions(weather_data, settings)
+                print(f"Weather prediction result for {city}: {result}")  # Log het resultaat van de voorspelling
+                return jsonify(result)
+            else:
+                print(f"Failed to fetch weather data for {city}")  # Log een mislukte poging om weerdata op te halen
+                return jsonify({"error": "Failed to fetch weather data"}), 500
         else:
-            return jsonify({"error": "Failed to fetch weather data"}), 500
-    else:
-        return jsonify({"error": "No settings found"}), 404
+            print("No settings found")  # Log dat er geen settings zijn gevonden
+            return jsonify({"error": "No settings found"}), 404
+    except Exception as e:
+        print(f"An error occurred: {e}")  # Log elke andere fout die optreedt
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
     db.create_all()

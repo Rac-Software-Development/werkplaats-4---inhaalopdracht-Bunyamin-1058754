@@ -17,7 +17,7 @@ function WeatherInput() {
 
   useEffect(() => {
     const settingsId = Cookies.get('settingsId');
-    console.log("Settings IDs:", settingsId)
+    console.log(`Settings ID from cookie: ${settingsId}`);
     if (settingsId) {
       axios.get(`http://127.0.0.1:5000/get_settings/${settingsId}`)
         .then(response => {
@@ -57,8 +57,9 @@ function WeatherInput() {
     .then(response => {
       const settingsId = response.data.id;
       Cookies.set('settingsId', settingsId);
+      console.log(`Cookie set with settings ID: ${settingsId}`);
       getPrediction({ city, minTemp, maxTemp, maxWind, rainChance, snowChance });
-      navigate(`/predict/${city}`);
+      navigate(`/predict/${settingsId}`);
     })
     .catch(error => {
       console.error('Error:', error);

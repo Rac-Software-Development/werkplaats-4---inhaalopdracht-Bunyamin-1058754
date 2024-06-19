@@ -4,9 +4,10 @@ from flask_cors import CORS, cross_origin
 from datetime import datetime, timedelta
 import requests
 import config
+import traceback
 
 app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///C:/Users/bunya/Desktop/STUDIE/JAAR 1/PERIODE 4/werkplaats-4---inhaalopdracht-Bunyamin-1058754/bike.db"
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///bike.db"
 db = SQLAlchemy(app)
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
@@ -23,11 +24,15 @@ class WeatherData(db.Model):
 with app.app_context():
     db.create_all()
 
-def get_settings():
-    return WeatherData.query.order_by(WeatherData.id.desc()).first()
+def get_settings(cookieid=None):
+    if cookieid:
+        return WeatherData.query.get(cookieid)
+    else:
+        return WeatherData.query.order_by(WeatherData.id.desc()).first()
 
 def get_weather(city, api_key):
     url = f'http://api.openweathermap.org/data/2.5/forecast?q={city}&appid={api_key}&units=metric'
+    print(f'http://api.openweathermap.org/data/2.5/forecast?q={city}&appid={api_key}&units=metric')
     response = requests.get(url)
     if response.status_code == 200:
         return response.json()
@@ -126,18 +131,21 @@ def add_weather_data():
     
     db.session.add(new_weather_data)
     db.session.commit()
+    print(f"New settings saved with ID: {new_weather_data.id}")  # Log de nieuwe instellingen-ID
+    return jsonify({"id": new_weather_data.id})  # Zorg ervoor dat de ID wordt geretourneerd
     return jsonify(data)
 
-@app.route('/predict/<city>', methods=['GET'])
+@app.route('/predict/<cookieid>', methods=['GET'])
 @cross_origin("http://localhost:3000")
-def get_weather_prediction(city):
+def get_weather_prediction(cookieid):
     try:
-        print(f"Fetching weather prediction for {city}")  # Log de stad waarvoor voorspellingen worden opgehaald
-        settings = get_settings()  # Haal de meest recente settings op
+        print(f"Fetching weather prediction for {cookieid}")  # Log de stad waarvoor voorspellingen worden opgehaald
+        settings = get_settings(cookieid)  # Haal de meest recente settings op
         if settings:
+            city = settings.city
             api_key = config.OPENWEATHER_API_KEY
             print(f"Using API key: {api_key}")  # Log de gebruikte API key
-            weather_data = get_weather(city, api_key)
+            weather_data = get_weather(settings.city, api_key)
             if weather_data:
                 print(f"Weather data fetched for {city}: {weather_data}")  # Log de opgehaalde weerdata
                 result = check_weather_conditions(weather_data, settings)
@@ -151,6 +159,9 @@ def get_weather_prediction(city):
             return jsonify({"error": "No settings found"}), 404
     except Exception as e:
         print(f"An error occurred: {e}")  # Log elke andere fout die optreedt
+        # print stacktrace
+        
+        print(traceback.format_exc()) 
         return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
